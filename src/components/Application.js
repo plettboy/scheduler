@@ -14,14 +14,17 @@ const [day, setDay] = useState("Monday")
 useEffect(() => {
   axios.get('/api/days')
   .then((response) => {
-    setDays(res.data)
+    setDays(response.data)
   })
   .catch((error) => {
     console.log(error.response.status)
     console.log(error.response.headers)
     console.log(error.response.data)
   })
-})
+},
+//empty array to only allow it to run once
+[])
+
 
 const appointments = {
   "1": {
