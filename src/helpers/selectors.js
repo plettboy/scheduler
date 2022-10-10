@@ -16,3 +16,16 @@ export function getAppointmentsForDay(state, day) {
 
   return appointmentFilter;
 }
+
+export function getInterview(state, interview) {
+  const interviewObj = {};
+
+  if (!interview) {
+    return null;
+  }
+  
+  interviewObj.interviewer = state.interviewers[interview.interviewer];
+  interviewObj.student = interview.student;
+
+  return interviewObj;
+}
