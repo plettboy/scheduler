@@ -102,8 +102,8 @@ export default function useApplicationData() {
 
     let numOfSpots = -1;
 
-    for (const appmt of state.days[dayId].appointments) {
-      if (!state.appointments[appmt].interview) {
+    for (const apt of state.days[dayId].appointments) {
+      if (!state.appointments[apt].interview) {
         numOfSpots++;
       }
     }
