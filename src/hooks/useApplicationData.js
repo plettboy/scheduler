@@ -49,11 +49,13 @@ export default function useApplicationData() {
 
     return axios.put(`/api/appointments/${id}`, appointment)
       .then((res) => {
+        //functionality for determining spots available
+        const daysArray = updateSpots();
 
-        console.log('axios put response', res);
         setState({
           ...state,
-          appointments
+          appointments,
+          days: daysArray
         })
 
       })
@@ -71,13 +73,51 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+    //functionality for determining spots available
+    const daysArray = updateSpots('delete');
 
     setState({
       ...state,
-      appointments
+      appointments,
+      days: daysArray
     });
 
     return axios.delete(`/api/appointments/${id}`)
+  }
+  //function for determining spots available
+  const updateSpots = (type) => {
+
+    let dayId = 0;
+    if (state.day === 'Monday') {
+      dayId = 0;
+    } else if (state.day === 'Tuesday') {
+      dayId = 1;
+    } else if (state.day === 'Wednesday') {
+      dayId = 2;
+    } else if (state.day === 'Thursday') {
+      dayId = 3;
+    } else if (state.day === 'Friday') {
+      dayId = 4;
+    }
+
+    let numOfSpots = -1;
+
+    for (const appmt of state.days[dayId].appointments) {
+      if (!state.appointments[appmt].interview) {
+        numOfSpots++;
+      }
+    }
+
+    if (type === 'delete') {
+      numOfSpots += 2;
+    }
+
+    console.log(`numOfSpots`, numOfSpots);
+
+    const daysArray = [...state.days];
+    daysArray[dayId].spots = numOfSpots;
+
+    return daysArray;
   }
 
   return {
