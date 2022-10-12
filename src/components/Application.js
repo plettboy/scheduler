@@ -10,71 +10,93 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 
 export default function Application(props) {
 
-const [state, setState] = useState({
-  day: 'Monday',
-  days: [],
-  interviewers: {},
-  appointments: {}
-})
-
-// const dailyAppointments = [];
-const interviewers = getInterviewersForDay(state, state.day);
-
-const setDay = day => setState({ ...state, day });
-
-
-
-useEffect(() => {
- const getDays =  axios.get('/api/days')
- const getAppt = axios.get('/api/appointments')
- const getInterviewer = axios.get('/api/interviewers')
- Promise.all([getDays, getAppt, getInterviewer])
-  
-  .then((all) => {
-    setState(prev => ({
-      ...prev,
-      days: all[0].data,
-      appointments: all[1].data,
-      interviewers: all[2].data,
-    }))
-  }).catch((error) => {
-    console.log(error.response.status)
-    console.log(error.response.headers)
-    console.log(error.response.data)
+  const [state, setState] = useState({
+    day: 'Monday',
+    days: [],
+    interviewers: {},
+    appointments: {}
   })
-},
-//empty array to only allow it to run once
-[])
+
+  // const dailyAppointments = [];
+  const interviewers = getInterviewersForDay(state, state.day);
+
+  const setDay = day => setState({ ...state, day });
+
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    console.log(appointments);
+
+    return axios.put(`/api/appointments/${id}`, appointment)
+      .then((res) => {
+
+        console.log('axios put response', res);
+        setState({
+          ...state,
+          appointments
+        })
+
+      })
+      .catch(e => console.log(e))
+
+  }
+
+
+  useEffect(() => {
+    const getDays = axios.get('/api/days')
+    const getAppt = axios.get('/api/appointments')
+    const getInterviewer = axios.get('/api/interviewers')
+    Promise.all([getDays, getAppt, getInterviewer])
+
+      .then((all) => {
+        setState(prev => ({
+          ...prev,
+          days: all[0].data,
+          appointments: all[1].data,
+          interviewers: all[2].data,
+        }))
+      }).catch((error) => {
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        console.log(error.response.data)
+      })
+  },
+    //empty array to only allow it to run once
+    [])
 
 
 
   return (
     <main className="layout">
       <section className="sidebar">
-      <img
-  className="sidebar--centered"
-  src="images/logo.png"
-  alt="Interview Scheduler"
-/>
-<hr className="sidebar__separator sidebar--centered" />
-<nav className="sidebar__menu">
-<DayList
+        <img
+          className="sidebar--centered"
+          src="images/logo.png"
+          alt="Interview Scheduler"
+        />
+        <hr className="sidebar__separator sidebar--centered" />
+        <nav className="sidebar__menu">
+          <DayList
             days={state.days}
             value={state.day}
             onChange={setDay}
           />
-</nav>
-<img
-  className="sidebar__lhl sidebar--centered"
-  src="images/lhl.png"
-  alt="Lighthouse Labs"
-/>
+        </nav>
+        <img
+          className="sidebar__lhl sidebar--centered"
+          src="images/lhl.png"
+          alt="Lighthouse Labs"
+        />
       </section>
       <section className="schedule">
         {getAppointmentsForDay(state, state.day).map(appointment => {
-          return <Appointment
-          {...appointment} key={appointment.id}
-          interview={getInterview(state, appointment.interview)} interviewers={interviewers}
+          return <Appointment {...appointment} key={appointment.id} interview={getInterview(state, appointment.interview)} interviewers={interviewers} bookInterview={bookInterview}
           />
         })}
         <Appointment key='last' time='5pm' />
