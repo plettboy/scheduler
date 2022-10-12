@@ -6,9 +6,10 @@ import Appointment from "components/Appointment";
 import axios from 'axios'
 
 
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay, cancelInterview } from "helpers/selectors";
 
 export default function Application(props) {
+
 
   const [state, setState] = useState({
     day: 'Monday',
@@ -45,6 +46,25 @@ export default function Application(props) {
       })
       .catch(e => console.log(e))
 
+  }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    setState({
+      ...state,
+      appointments
+    });
+
+    return axios.delete(`/api/appointments/${id}`)
   }
 
 
@@ -96,7 +116,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {getAppointmentsForDay(state, state.day).map(appointment => {
-          return <Appointment {...appointment} key={appointment.id} interview={getInterview(state, appointment.interview)} interviewers={interviewers} bookInterview={bookInterview}
+          return <Appointment {...appointment} key={appointment.id} interview={getInterview(state, appointment.interview)} interviewers={interviewers} bookInterview={bookInterview} cancelInterview={cancelInterview}
           />
         })}
         <Appointment key='last' time='5pm' />
