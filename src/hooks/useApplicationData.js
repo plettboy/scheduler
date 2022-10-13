@@ -45,10 +45,11 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    console.log(appointments);
+    console.log("appointments", appointments);
 
     return axios.put(`/api/appointments/${id}`, appointment)
       .then((res) => {
+        console.log("HERE!!!!!!!! BEFORE")
         //functionality for determining spots available
         const daysArray = updateSpots();
 
@@ -57,9 +58,10 @@ export default function useApplicationData() {
           appointments,
           days: daysArray
         })
-
+        console.log("HERE!!!!!!!!")
       })
-      .catch(e => console.log(e))
+      //rejects the save function promise
+      .catch(e => Promise.reject(e))
 
   }
 
@@ -76,13 +78,23 @@ export default function useApplicationData() {
     //functionality for determining spots available
     const daysArray = updateSpots('delete');
 
-    setState({
-      ...state,
-      appointments,
-      days: daysArray
-    });
+    // setState({
+    //   ...state,
+    //   appointments,
+    //   days: daysArray
+    // });
 
     return axios.delete(`/api/appointments/${id}`)
+
+      .then(() => {
+        setState({
+          ...state,
+          appointments,
+          days: daysArray
+        });
+      })
+      .catch(e => Promise.reject(e))
+
   }
   //function for determining spots available
   const updateSpots = (type) => {

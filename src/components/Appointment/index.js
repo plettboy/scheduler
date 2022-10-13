@@ -47,23 +47,27 @@ export default function Appointment(props) {
         transition(SHOW);
       })
       .catch(err => {
-        transition(ERROR_SAVE, true);
+        console.log("SAVE CATCH");
         console.log(err);
+        transition(ERROR_SAVE, true);
       })
   }
 
   const cancel = function () {
-
+    console.log("cancel funciton")
     transition(DELETING);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
+        console.log("then cancel")
       })
       .catch(err => {
+        console.log("catch cancel")
         transition(ERROR_DELETE, true);
         console.log(err);
       })
   }
+
   function deleteInterview() {
     transition(DELETING);
     props.cancelInterview(props.id).then((response) => {
@@ -76,11 +80,7 @@ export default function Appointment(props) {
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
-        <Show
-          student={props.interview.student}
-          interviewer={props.interview.interviewer}
-          onDelete={() => transition(CONFIRM)}
-          onEdit={() => transition(EDIT)}
+        <Show student={props.interview.student} interviewer={props.interview.interviewer} onDelete={() => transition(CONFIRM)} onEdit={() => transition(EDIT)}
         />
       )}
       {mode === CREATE && <Form interviewers={interviewers} onCancel={back}

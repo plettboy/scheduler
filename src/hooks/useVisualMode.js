@@ -12,7 +12,10 @@ export default function useVisualMode(initial) {
       updateHistory.push(newMode);
       setHistory(updateHistory);
       setMode(newMode);
+      console.log("TESTING1", newMode, "replace", replace)
+      console.log("history", history)
     } else {
+      console.log("TESTING2", newMode, "replace", replace)
       setHistory(prev => (
         [...prev, newMode]
       ));
@@ -26,6 +29,7 @@ export default function useVisualMode(initial) {
       const historyUpdate = [...history];
       historyUpdate.pop();
       setHistory(historyUpdate);
+      console.log("history", historyUpdate)
       setMode(historyUpdate[historyUpdate.length - 1]);
     }
   }
