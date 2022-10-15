@@ -45,11 +45,9 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    console.log("appointments", appointments);
 
     return axios.put(`/api/appointments/${id}`, appointment)
       .then((res) => {
-        console.log("HERE!!!!!!!! BEFORE")
         //functionality for determining spots available
         const daysArray = updateSpots();
 
@@ -58,7 +56,6 @@ export default function useApplicationData() {
           appointments,
           days: daysArray
         })
-        console.log("HERE!!!!!!!!")
       })
       //rejects the save function promise
       .catch(e => Promise.reject(e))
@@ -124,7 +121,6 @@ export default function useApplicationData() {
       numOfSpots += 2;
     }
 
-    console.log(`numOfSpots`, numOfSpots);
 
     const daysArray = [...state.days];
     daysArray[dayId].spots = numOfSpots;

@@ -47,22 +47,18 @@ export default function Appointment(props) {
         transition(SHOW);
       })
       .catch(err => {
-        console.log("SAVE CATCH");
         console.log(err);
         transition(ERROR_SAVE, true);
       })
   }
 
   const cancel = function () {
-    console.log("cancel funciton")
     transition(DELETING);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
-        console.log("then cancel")
       })
       .catch(err => {
-        console.log("catch cancel")
         transition(ERROR_DELETE, true);
         console.log(err);
       })
