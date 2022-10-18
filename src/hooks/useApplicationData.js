@@ -28,8 +28,6 @@ export default function useApplicationData() {
         }))
       }).catch((error) => {
         console.log(error.response.status)
-        console.log(error.response.headers)
-        console.log(error.response.data)
       })
   },
     //empty array to only allow it to run once
@@ -62,6 +60,8 @@ export default function useApplicationData() {
 
   }
 
+  //function for canceling the interview
+
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
@@ -75,11 +75,6 @@ export default function useApplicationData() {
     //functionality for determining spots available
     const daysArray = updateSpots('delete');
 
-    // setState({
-    //   ...state,
-    //   appointments,
-    //   days: daysArray
-    // });
 
     return axios.delete(`/api/appointments/${id}`)
 

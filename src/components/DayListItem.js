@@ -9,6 +9,7 @@ export default function DayListItem(props) {
     'days-list_item--full': (props.spots === 0)
   })
 
+  //display the number of appointment spots remaining
 
   const formatSpots = function (spots) {
     if (spots === 1) {
