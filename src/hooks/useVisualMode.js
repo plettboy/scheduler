@@ -26,7 +26,8 @@ export default function useVisualMode(initial) {
       const historyUpdate = [...history];
       historyUpdate.pop();
       setHistory(historyUpdate);
-      setMode(historyUpdate[historyUpdate.length - 1]);
+      setMode(history[history.length - 2]);
+      // setMode(historyUpdate[historyUpdate.length - 1]);
     }
   }
 
