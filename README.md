@@ -19,6 +19,7 @@ The Interview Scheduler is a single page, REACT web application, with a function
 ## Setup
 
 Install dependencies with `npm install`.
+CLone the scheduler-api server from : https://github.com/lighthouse-labs/scheduler-api
 
 ## Running Webpack Development Server
 
