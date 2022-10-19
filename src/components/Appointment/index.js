@@ -62,12 +62,6 @@ export default function Appointment(props) {
       })
   }
 
-  function deleteInterview() {
-    transition(DELETING);
-    props.cancelInterview(props.id).then((response) => {
-      transition(EMPTY);
-    })
-  }
 
   return (
     <article className="appointment" data-testid="appointment">

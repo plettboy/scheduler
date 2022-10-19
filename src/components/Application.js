@@ -7,7 +7,7 @@ import Appointment from "components/Appointment";
 import useApplicationData from "hooks/useApplicationData";
 
 
-import { getAppointmentsForDay, getInterview, getInterviewersForDay, cancelInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application(props) {
 
