@@ -39,6 +39,16 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: { ...interview }
     };
+    const days = state.days.map(day => {
+      if (day.appointments.includes(id)) {
+        if (!state.appointments[id].interview) {
+          return { ...day, spots: day.spots - 1 }
+        }
+      }
+      return day;
+    })
+
+
     const appointments = {
       ...state.appointments,
       [id]: appointment
@@ -46,13 +56,12 @@ export default function useApplicationData() {
 
     return axios.put(`/api/appointments/${id}`, appointment)
       .then((res) => {
-        //functionality for determining spots available
-        const daysArray = updateSpots();
 
         setState({
           ...state,
           appointments,
-          days: daysArray
+          // days: daysArray
+          days
         })
       })
       //rejects the save function promise
@@ -89,7 +98,7 @@ export default function useApplicationData() {
 
   }
   //function for determining spots available
-  const updateSpots = (type) => {
+  const updateSpots = (type, update) => {
 
     let dayId = 0;
     if (state.day === 'Monday') {

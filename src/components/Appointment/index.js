@@ -52,7 +52,7 @@ export default function Appointment(props) {
   }
 
   const cancel = function () {
-    transition(DELETING);
+    transition(DELETING, true);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
@@ -61,7 +61,6 @@ export default function Appointment(props) {
         transition(ERROR_DELETE, true);
       })
   }
-
 
   return (
     <article className="appointment" data-testid="appointment">
@@ -77,7 +76,7 @@ export default function Appointment(props) {
       {mode === SAVING && <Status message="Saving..." />}
       {mode === DELETING && <Status message="Deleting..." />}
       {mode === CONFIRM && <Confirm message="Are you sure you want to delete this appointment?" onCancel={back} onConfirm={cancel} />}
-      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer} interviewers={props.interviewers} onCancel={back} onSave={save} />}
+      {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onCancel={back} onSave={save} />}
       {mode === ERROR_DELETE && <Error message='Could not cancel appointment.' onClose={back} />}
       {mode === ERROR_SAVE && <Error message='Could not save appointment.' onClose={back} />}
     </article>
